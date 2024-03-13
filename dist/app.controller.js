@@ -21,29 +21,36 @@ let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
-    async getStreamVideo(id, headers, res) {
-        const videoPath = `assets/${id}.mp4`;
-        const { size } = (0, fs_1.statSync)(videoPath);
-        const videoRange = headers.range;
-        if (videoRange) {
-            const parts = videoRange.replace(/bytes=/, "").split("-");
-            const start = parseInt(parts[0], 10);
-            const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
-            const chunksize = (end - start) + 1;
-            const readStreamfile = (0, fs_1.createReadStream)(videoPath, { start, end, highWaterMark: 60 });
-            const head = {
-                'Content-Range': `bytes ${start}-${end}/${size}`,
-                'Content-Length': chunksize,
-            };
-            res.writeHead(common_1.HttpStatus.PARTIAL_CONTENT, head);
-            readStreamfile.pipe(res);
+    async getStreamVideo(idString, headers, res) {
+        const id = Number.parseInt(idString);
+        if (this.appService.isVideoListed(id)) {
+            const videoPath = `assets/videos/${id}.mp4`;
+            const { size } = (0, fs_1.statSync)(videoPath);
+            const videoRange = headers.range;
+            if (videoRange) {
+                const parts = videoRange.replace(/bytes=/, "").split("-");
+                const start = parseInt(parts[0], 10);
+                const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
+                const chunksize = (end - start) + 1;
+                const readStreamfile = (0, fs_1.createReadStream)(videoPath, { start, end, highWaterMark: 60 });
+                const head = {
+                    'Content-Range': `bytes ${start}-${end}/${size}`,
+                    'Content-Length': chunksize,
+                };
+                res.writeHead(common_1.HttpStatus.PARTIAL_CONTENT, head);
+                readStreamfile.pipe(res);
+            }
+            else {
+                const head = {
+                    'Content-Length': size,
+                };
+                res.writeHead(common_1.HttpStatus.OK, head);
+                (0, fs_1.createReadStream)(videoPath).pipe(res);
+            }
         }
         else {
-            const head = {
-                'Content-Length': size,
-            };
-            res.writeHead(common_1.HttpStatus.OK, head);
-            (0, fs_1.createReadStream)(videoPath).pipe(res);
+            res.writeHead(common_1.HttpStatus.UNAUTHORIZED);
+            res.send();
         }
     }
     findAll() {

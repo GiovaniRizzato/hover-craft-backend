@@ -8,28 +8,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
-const fs = require("fs");
-const data = fs.readFileSync('assets/videoList.json', 'utf8');
-const videoDB = JSON.parse(data);
+const allVideos = [
+    {
+        id: 1,
+        name: "tom-and-jerry",
+        duration: '3 mins',
+        title: 'Tom & Jerry'
+    },
+];
 let AppService = class AppService {
     findAll() {
-        return videoDB;
+        return allVideos;
     }
     findOne(id) {
-        const video = videoDB.find(video => video.id == id);
+        const video = allVideos.find(video => video.id == id);
         if (video) {
             return video;
         }
         else {
-            throw new Error("Invalid ID");
+            return `There is no video with id ${id}`;
         }
-    }
-    isVideoListed(id) {
-        return this.findOne(id).isListed;
     }
 };
 exports.AppService = AppService;
 exports.AppService = AppService = __decorate([
     (0, common_1.Injectable)()
 ], AppService);
-//# sourceMappingURL=app.service.js.map
+//# sourceMappingURL=app.service%20copy.js.map

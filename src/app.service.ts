@@ -1,25 +1,28 @@
 import { Injectable } from '@nestjs/common';
-const allVideos = [
-  {
-    id: 1,
-    name: "tom-and-jerry",
-    duration: '3 mins',
-    title: 'Tom & Jerry'
-  },
-];
+import * as fs from 'fs';
+import { VideoSummary } from './app.model';
+
+//Start the application with the "videoList.json" as a base, once started, it's going to use "videoDB" as a list of all videos
+const data = fs.readFileSync('assets/videoList.json', 'utf8');
+const videoDB: VideoSummary[] = JSON.parse(data);
+
 @Injectable()
 export class AppService {
-  findAll() {
-    return allVideos
+  findAll (): VideoSummary[] {
+    return videoDB;
   }
 
-  findOne(id: number) {
-    const video = allVideos.find(video => video.id == id)
+  findOne (id: number): VideoSummary {
+    const video = videoDB.find(video => video.id == id)
     if (video) {
-      return video
+      return video;
     }
     else {
-      return `There is no video with id ${id}`
+      throw new Error("Invalid ID");
     }
+  }
+
+  isVideoListed (id: number): boolean {
+    return this.findOne(id).isListed
   }
 }
