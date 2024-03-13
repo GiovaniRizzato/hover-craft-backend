@@ -1,6 +1,6 @@
-# Video streaming
+# Hover Craft
 
-Welcome to the repository for Video Streaming! This project is a backend implementation for a standalone and lightwight video streaming, where you can upload, check the status and watch streaming of videos in MP4 format.
+Welcome to the repository for Hover Creaft: Video Streaming! This project is a backend implementation for a standalone and lightwight video streaming, where you can upload, check the status and watch streaming of videos in MP4 format.
 
 This solution comes with two videos already uploaded as a sample, one of which is marked as "Not Listed", which means that, you can't watch the streaming of that video, but you can still see it the list.
 
