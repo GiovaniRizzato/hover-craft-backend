@@ -27,13 +27,8 @@ export class AppService {
   }
 
   editOne (id: number, editedSummary: CreateEditVideo): VideoSummary {
-    const oldVideoSummary = videoDB.find(oldVideoSummary => oldVideoSummary.id == id)
-    if (oldVideoSummary) {
-      return this.editVideoSummary(oldVideoSummary, editedSummary);
-    }
-    else {
-      throw new Error("Invalid ID");
-    }
+    const oldVideoSummary = this.findOne(id);
+    return this.editVideoSummary(oldVideoSummary, editedSummary);
   }
 
   editVideoSummary(oldData: VideoSummary, newData: CreateEditVideo): VideoSummary{
