@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import * as path from 'path';
 
 describe('AppController', () => {
   let app: INestApplication;
@@ -15,24 +16,28 @@ describe('AppController', () => {
     await app.init();
   });
 
+  afterEach(async () => {
+    await app.close();
+  });
+
   it('should be able to retrive all videos informations', () => {
     return request(app.getHttpServer())
       .get('/videos')
       .expect(HttpStatus.OK)
       .expect([
         {
-          "id": 0,
-          "title": "Planet earth",
-          "duration": "30 sec",
-          "isListed": true
+          id: 0,
+          title: 'Planet earth',
+          duration: '30 sec',
+          isListed: true,
         },
         {
-          "id": 1,
-          "title": "Private fotage (Street)",
-          "duration": "5 sec",
-          "isListed": false
-        }
-    ]);
+          id: 1,
+          title: 'Private fotage (Street)',
+          duration: '5 sec',
+          isListed: false,
+        },
+      ]);
   });
 
   it('should be able to retrive a specifc video informations', () => {
@@ -40,29 +45,29 @@ describe('AppController', () => {
       .get('/videos/1')
       .expect(HttpStatus.OK)
       .expect({
-        "id": 1,
-        "title": "Private fotage (Street)",
-        "duration": "5 sec",
-        "isListed": false
+        id: 1,
+        title: 'Private fotage (Street)',
+        duration: '5 sec',
+        isListed: false,
       });
   });
 
-  describe('should be change a specifc video informations', () => {
+  describe('should be able to change a specifc video informations', () => {
     beforeEach(() => {
       return request(app.getHttpServer())
         .put('/videos/1')
         .send({
-          title: "Private fotage (Street)",
-          duration: "5 sec",
-          isListed: true
-        }).set('Accept', 'application/json')
+          title: 'Private fotage (Street)',
+          duration: '5 sec',
+          isListed: true,
+        })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.OK)
         .expect({
-          "id": 1,
-          "title": "Private fotage (Street)",
-          "duration": "5 sec",
-          "isListed": true
+          id: 1,
+          title: 'Private fotage (Street)',
+          duration: '5 sec',
+          isListed: true,
         });
     });
 
@@ -73,14 +78,42 @@ describe('AppController', () => {
         .expect('Content-Type', /json/)
         .expect(HttpStatus.OK)
         .expect({
-          "id": 1,
-          "title": "Private fotage (Street)",
-          "duration": "5 sec",
-          "isListed": true
+          id: 1,
+          title: 'Private fotage (Street)',
+          duration: '5 sec',
+          isListed: true,
+        });
+    });
+  });
+
+  describe('should be able to upload a new video', () => {
+    beforeEach(() => {
+      return request(app.getHttpServer())
+        .post('/videos')
+        .set('Content-Type', 'multipart/form-data')
+        .attach('file', path.resolve(__dirname, 'files', '3.mp4'))
+        .field('title', 'Garden')
+        .field('duration', '30 sec')
+        .field('isListed', true)
+        .expect(HttpStatus.CREATED)
+        .expect({
+          id: 2,
+          title: 'Garden',
+          duration: '30 sec',
+          isListed: 'true',
         });
     });
 
+    it('should the new video info', () => {
+      return request(app.getHttpServer())
+        .get('/videos/2')
+        .expect(HttpStatus.OK)
+        .expect({
+          id: 2,
+          title: 'Garden',
+          duration: '30 sec',
+          isListed: 'true',
+        });
+    });
   });
-
-  
 });
