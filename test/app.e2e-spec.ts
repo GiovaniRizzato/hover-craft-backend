@@ -57,16 +57,16 @@ describe('AppController', () => {
       return request(app.getHttpServer())
         .put('/videos/1')
         .send({
-          title: 'Private fotage (Street)',
-          duration: '5 sec',
+          title: 'Private fotage (Street) - changed',
+          duration: '4 + 1 sec',
           isListed: true,
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.OK)
         .expect({
           id: 1,
-          title: 'Private fotage (Street)',
-          duration: '5 sec',
+          title: 'Private fotage (Street) - changed',
+          duration: '4 + 1 sec',
           isListed: true,
         });
     });
