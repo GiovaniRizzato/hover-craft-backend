@@ -37,19 +37,19 @@ Para utilizar a solução, siga os passos abaixo:
   * POST /video
   * GET /video/stream/{id}
 
-  ```json
+  ```typescript
   {
-    "id": number,
-    "title": string,
-    "duration": string,
-    "isListed": boolean
+    id: number,
+    title: string,
+    duration: string,
+    isListed: boolean
   }
   ```
 
-  ```json
+  ```typescript
   {
-    "title": string,
-    "duration": string,
-    "isListed": boolean
+    title: string,
+    duration: string,
+    isListed: boolean
   }
-    ```
+  ```
