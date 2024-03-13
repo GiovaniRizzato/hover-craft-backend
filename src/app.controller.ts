@@ -1,10 +1,11 @@
 
-import { Controller, Get, Param, Res, HttpStatus, Header, Put, Body } from '@nestjs/common';
+import { Controller, Get, Param, Res, HttpStatus, Header, Put, Body, Post, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { statSync, createReadStream } from 'fs';
 import { Headers } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateEditVideo } from './app.model';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('video')
 export class AppController {
@@ -16,7 +17,7 @@ export class AppController {
   async getStreamVideo(@Param('id') idString: string, @Headers() headers, @Res() res: Response) {
     const id = Number.parseInt(idString);
     if (this.appService.isVideoListed(id)){
-      const videoPath = `assets/videos/${id}.mp4`;
+      const videoPath = `${AppService.getVideoFolderPath()}/${id}.mp4`;
       const { size } = statSync(videoPath);
       const videoRange = headers.range;
       if (videoRange) {
@@ -57,5 +58,20 @@ export class AppController {
   @Put(':id')
   createVideo(@Param('id') id: string, @Body() videoSummary: CreateEditVideo) {
     return this.appService.editOne(+id, videoSummary);
+  }
+
+  @Post()
+  @UseInterceptors(FileInterceptor('file'))
+  uploadVideo(
+    @Body() videoSummary: CreateEditVideo,
+    @UploadedFile (new ParseFilePipe({validators: [
+          //1024 = 1Kb, 1024 * 1Kb = 1Mb
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
+          new FileTypeValidator({ fileType: 'video/mp4' }),
+        ]
+      })
+    ) file: Express.Multer.File
+  ) {
+    return this.appService.createFile(videoSummary, file);
   }
 }

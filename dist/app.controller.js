@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
 const fs_1 = require("fs");
 const common_2 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -24,7 +25,7 @@ let AppController = class AppController {
     async getStreamVideo(idString, headers, res) {
         const id = Number.parseInt(idString);
         if (this.appService.isVideoListed(id)) {
-            const videoPath = `assets/videos/${id}.mp4`;
+            const videoPath = `${app_service_1.AppService.getVideoFolderPath()}/${id}.mp4`;
             const { size } = (0, fs_1.statSync)(videoPath);
             const videoRange = headers.range;
             if (videoRange) {
@@ -62,6 +63,9 @@ let AppController = class AppController {
     createVideo(id, videoSummary) {
         return this.appService.editOne(+id, videoSummary);
     }
+    uploadVideo(videoSummary, file) {
+        return this.appService.createFile(videoSummary, file);
+    }
 };
 exports.AppController = AppController;
 __decorate([
@@ -96,6 +100,19 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "createVideo", null);
+__decorate([
+    (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ validators: [
+            new common_1.MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
+            new common_1.FileTypeValidator({ fileType: 'video/mp4' }),
+        ]
+    }))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "uploadVideo", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)('video'),
     __metadata("design:paramtypes", [app_service_1.AppService])
