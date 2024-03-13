@@ -1,5 +1,19 @@
-
-import { Controller, Get, Param, Res, HttpStatus, Header, Put, Body, Post, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Res,
+  HttpStatus,
+  Header,
+  Put,
+  Body,
+  Post,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { statSync, createReadStream } from 'fs';
 import { Headers } from '@nestjs/common';
@@ -9,23 +23,27 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('video')
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(private readonly appService: AppService) {}
 
   @Get('stream/:id')
   @Header('Accept-Ranges', 'bytes')
   @Header('Content-Type', 'video/mp4')
-  async getStreamVideo(@Param('id') idString: string, @Headers() headers, @Res() res: Response) {
+  async getStreamVideo(
+    @Param('id') idString: string,
+    @Headers() headers,
+    @Res() res: Response,
+  ) {
     const id = Number.parseInt(idString);
-    if (this.appService.isVideoListed(id)){
+    if (this.appService.isVideoListed(id)) {
       const videoPath = `${AppService.getVideoFolderPath()}/${id}.mp4`;
       const { size } = statSync(videoPath);
       const videoRange = headers.range;
       if (videoRange) {
-        const parts = videoRange.replace(/bytes=/, "").split("-");
+        const parts = videoRange.replace(/bytes=/, '').split('-');
         const start = parseInt(parts[0], 10);
         const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
-        const chunksize = (end - start) + 1;
-        const readStreamfile = createReadStream(videoPath, {start, end});
+        const chunksize = end - start + 1;
+        const readStreamfile = createReadStream(videoPath, { start, end });
         const head = {
           'Content-Range': `bytes ${start}-${end}/${size}`,
           'Content-Length': chunksize,
@@ -36,11 +54,11 @@ export class AppController {
         const head = {
           'Content-Length': size,
         };
-        res.writeHead(HttpStatus.OK, head);//200
+        res.writeHead(HttpStatus.OK, head); //200
         createReadStream(videoPath).pipe(res);
       }
     } else {
-      res.writeHead(HttpStatus.UNAUTHORIZED);//401
+      res.writeHead(HttpStatus.UNAUTHORIZED); //401
       res.send();
     }
   }
@@ -64,13 +82,16 @@ export class AppController {
   @UseInterceptors(FileInterceptor('file'))
   uploadVideo(
     @Body() videoSummary: CreateEditVideo,
-    @UploadedFile (new ParseFilePipe({validators: [
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
           //1024 = 1Kb, 1024 * 1Kb = 1Mb
           new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
           new FileTypeValidator({ fileType: 'video/mp4' }),
-        ]
-      })
-    ) file: Express.Multer.File
+        ],
+      }),
+    )
+    file: Express.Multer.File,
   ) {
     return this.appService.createFile(videoSummary, file);
   }
