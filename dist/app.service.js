@@ -20,12 +20,12 @@ let AppService = AppService_1 = class AppService {
         return videoDB;
     }
     findOne(id) {
-        const video = videoDB.find(video => video.id == id);
+        const video = videoDB.find((video) => video.id == id);
         if (video) {
             return video;
         }
         else {
-            throw new Error("Invalid ID");
+            throw new Error('Invalid ID');
         }
     }
     isVideoListed(id) {
@@ -46,13 +46,12 @@ let AppService = AppService_1 = class AppService {
             id: videoDB.length,
             title: createEditVideo.title,
             duration: createEditVideo.duration,
-            isListed: createEditVideo.isListed
+            isListed: createEditVideo.isListed,
         };
         fs.writeFileSync(`${AppService_1.getVideoFolderPath()}/${videoSummary.id}.mp4`, file.buffer);
         videoDB.push(videoSummary);
         return videoSummary;
     }
-    ;
 };
 exports.AppService = AppService;
 exports.AppService = AppService = AppService_1 = __decorate([

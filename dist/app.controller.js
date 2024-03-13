@@ -29,10 +29,10 @@ let AppController = class AppController {
             const { size } = (0, fs_1.statSync)(videoPath);
             const videoRange = headers.range;
             if (videoRange) {
-                const parts = videoRange.replace(/bytes=/, "").split("-");
+                const parts = videoRange.replace(/bytes=/, '').split('-');
                 const start = parseInt(parts[0], 10);
                 const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
-                const chunksize = (end - start) + 1;
+                const chunksize = end - start + 1;
                 const readStreamfile = (0, fs_1.createReadStream)(videoPath, { start, end });
                 const head = {
                     'Content-Range': `bytes ${start}-${end}/${size}`,
@@ -104,17 +104,18 @@ __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ validators: [
+    __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
+        validators: [
             new common_1.MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
             new common_1.FileTypeValidator({ fileType: 'video/mp4' }),
-        ]
+        ],
     }))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "uploadVideo", null);
 exports.AppController = AppController = __decorate([
-    (0, common_1.Controller)('video'),
+    (0, common_1.Controller)('videos'),
     __metadata("design:paramtypes", [app_service_1.AppService])
 ], AppController);
 //# sourceMappingURL=app.controller.js.map

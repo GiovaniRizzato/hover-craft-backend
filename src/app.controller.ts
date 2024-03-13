@@ -21,7 +21,7 @@ import { Response } from 'express';
 import { CreateEditVideo } from './app.model';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('video')
+@Controller('videos')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 

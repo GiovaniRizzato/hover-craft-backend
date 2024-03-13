@@ -17,7 +17,7 @@ describe('AppController', () => {
 
   it('should be able to retrive all videos informations', () => {
     return request(app.getHttpServer())
-      .get('/video')
+      .get('/videos')
       .expect(200)
       .expect([
         {
@@ -35,9 +35,9 @@ describe('AppController', () => {
     ]);
   });
 
-  it('should be able to retrive all videos informations', () => {
+  it('should be able to retrive a specifc video informations', () => {
     return request(app.getHttpServer())
-      .get('/video/1')
+      .get('/videos/1')
       .expect(200)
       .expect({
         "id": 1,
