@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import * as request from 'supertest';
 import * as path from 'path';
+import * as fs from 'fs';
 
 describe('AppController', () => {
   let app: INestApplication;
@@ -115,5 +116,13 @@ describe('AppController', () => {
           isListed: 'true',
         });
     });
+  });
+
+  test('should be able to stream the video', () => {
+    const video = fs.readFileSync('test/files/0.mp4')
+    return request(app.getHttpServer())
+      .get('/videos/stream/0')
+      .expect(HttpStatus.OK)
+      .expect(video);
   });
 });
