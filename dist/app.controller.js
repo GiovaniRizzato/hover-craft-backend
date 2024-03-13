@@ -32,7 +32,7 @@ let AppController = class AppController {
                 const start = parseInt(parts[0], 10);
                 const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
                 const chunksize = (end - start) + 1;
-                const readStreamfile = (0, fs_1.createReadStream)(videoPath, { start, end, highWaterMark: 60 });
+                const readStreamfile = (0, fs_1.createReadStream)(videoPath, { start, end });
                 const head = {
                     'Content-Range': `bytes ${start}-${end}/${size}`,
                     'Content-Length': chunksize,
@@ -58,6 +58,9 @@ let AppController = class AppController {
     }
     findOne(id) {
         return this.appService.findOne(+id);
+    }
+    createVideo(id, videoSummary) {
+        return this.appService.editOne(+id, videoSummary);
     }
 };
 exports.AppController = AppController;
@@ -85,6 +88,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "createVideo", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)('video'),
     __metadata("design:paramtypes", [app_service_1.AppService])

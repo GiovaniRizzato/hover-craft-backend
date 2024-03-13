@@ -1,9 +1,10 @@
 
-import { Controller, Get, Param, Res, HttpStatus, Header, Post } from '@nestjs/common';
+import { Controller, Get, Param, Res, HttpStatus, Header, Put, Body } from '@nestjs/common';
 import { AppService } from './app.service';
 import { statSync, createReadStream } from 'fs';
 import { Headers } from '@nestjs/common';
 import { Response } from 'express';
+import { CreateEditVideo } from './app.model';
 
 @Controller('video')
 export class AppController {
@@ -23,7 +24,7 @@ export class AppController {
         const start = parseInt(parts[0], 10);
         const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
         const chunksize = (end - start) + 1;
-        const readStreamfile = createReadStream(videoPath, { start, end, highWaterMark:60 });
+        const readStreamfile = createReadStream(videoPath, {start, end});
         const head = {
           'Content-Range': `bytes ${start}-${end}/${size}`,
           'Content-Length': chunksize,
@@ -51,5 +52,10 @@ export class AppController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.appService.findOne(+id);
+  }
+
+  @Put(':id')
+  createVideo(@Param('id') id: string, @Body() videoSummary: CreateEditVideo) {
+    return this.appService.editOne(+id, videoSummary);
   }
 }

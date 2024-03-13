@@ -27,6 +27,21 @@ let AppService = class AppService {
     isVideoListed(id) {
         return this.findOne(id).isListed;
     }
+    editOne(id, editedSummary) {
+        const oldVideoSummary = videoDB.find(oldVideoSummary => oldVideoSummary.id == id);
+        if (oldVideoSummary) {
+            return this.editVideoSummary(oldVideoSummary, editedSummary);
+        }
+        else {
+            throw new Error("Invalid ID");
+        }
+    }
+    editVideoSummary(oldData, newData) {
+        oldData.duration = newData.duration;
+        oldData.title = newData.title;
+        oldData.isListed = newData.isListed;
+        return oldData;
+    }
 };
 exports.AppService = AppService;
 exports.AppService = AppService = __decorate([

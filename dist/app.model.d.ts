@@ -4,3 +4,8 @@ export interface VideoSummary {
     duration: string;
     isListed: boolean;
 }
+export interface CreateEditVideo {
+    title: string;
+    duration: string;
+    isListed: boolean;
+}

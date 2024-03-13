@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import { VideoSummary } from './app.model';
+import { CreateEditVideo, VideoSummary } from './app.model';
 
 //Start the application with the "videoList.json" as a base, once started, it's going to use "videoDB" as a list of all videos
 const data = fs.readFileSync('assets/videoList.json', 'utf8');
@@ -24,5 +24,22 @@ export class AppService {
 
   isVideoListed (id: number): boolean {
     return this.findOne(id).isListed
+  }
+
+  editOne (id: number, editedSummary: CreateEditVideo): VideoSummary {
+    const oldVideoSummary = videoDB.find(oldVideoSummary => oldVideoSummary.id == id)
+    if (oldVideoSummary) {
+      return this.editVideoSummary(oldVideoSummary, editedSummary);
+    }
+    else {
+      throw new Error("Invalid ID");
+    }
+  }
+
+  editVideoSummary(oldData: VideoSummary, newData: CreateEditVideo): VideoSummary{
+    oldData.duration = newData.duration;
+    oldData.title = newData.title;
+    oldData.isListed = newData.isListed;
+    return oldData;
   }
 }
