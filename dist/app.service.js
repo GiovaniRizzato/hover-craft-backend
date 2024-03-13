@@ -42,17 +42,15 @@ let AppService = AppService_1 = class AppService {
         return oldData;
     }
     createFile(createEditVideo, file) {
-        return new Promise((resolve) => {
-            const videoSummary = {
-                id: videoDB.length,
-                title: createEditVideo.title,
-                duration: createEditVideo.duration,
-                isListed: createEditVideo.isListed
-            };
-            fs.writeFileSync(`${AppService_1.getVideoFolderPath()}/${videoSummary.id}.mp4`, file.buffer);
-            videoDB.push(videoSummary);
-            resolve(videoSummary);
-        });
+        const videoSummary = {
+            id: videoDB.length,
+            title: createEditVideo.title,
+            duration: createEditVideo.duration,
+            isListed: createEditVideo.isListed
+        };
+        fs.writeFileSync(`${AppService_1.getVideoFolderPath()}/${videoSummary.id}.mp4`, file.buffer);
+        videoDB.push(videoSummary);
+        return videoSummary;
     }
     ;
 };

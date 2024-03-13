@@ -44,19 +44,17 @@ export class AppService {
     return oldData;
   }
 
-  createFile (createEditVideo: CreateEditVideo, file: Express.Multer.File): Promise<VideoSummary> {
-    return new Promise<VideoSummary>((resolve) => {
-      const videoSummary: VideoSummary = {
-        id: videoDB.length,
-        title: createEditVideo.title,
-        duration: createEditVideo.duration,
-        isListed: createEditVideo.isListed
-      };   
+  createFile (createEditVideo: CreateEditVideo, file: Express.Multer.File): VideoSummary {
+    const videoSummary: VideoSummary = {
+      id: videoDB.length,
+      title: createEditVideo.title,
+      duration: createEditVideo.duration,
+      isListed: createEditVideo.isListed
+    };   
 
-      fs.writeFileSync(`${AppService.getVideoFolderPath()}/${videoSummary.id}.mp4`, file.buffer)
-      
-      videoDB.push(videoSummary);
-      resolve(videoSummary);
-    })
+    fs.writeFileSync(`${AppService.getVideoFolderPath()}/${videoSummary.id}.mp4`, file.buffer)
+
+    videoDB.push(videoSummary);
+    return videoSummary;
   };
 }

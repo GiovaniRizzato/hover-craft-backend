@@ -7,5 +7,5 @@ export declare class AppService {
     isVideoListed(id: number): boolean;
     editOne(id: number, editedSummary: CreateEditVideo): VideoSummary;
     editVideoSummary(oldData: VideoSummary, newData: CreateEditVideo): VideoSummary;
-    createFile(createEditVideo: CreateEditVideo, file: Express.Multer.File): Promise<VideoSummary>;
+    createFile(createEditVideo: CreateEditVideo, file: Express.Multer.File): VideoSummary;
 }

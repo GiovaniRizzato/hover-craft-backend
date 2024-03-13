@@ -9,5 +9,5 @@ export declare class AppController {
     findAll(): import("./app.model").VideoSummary[];
     findOne(id: string): import("./app.model").VideoSummary;
     createVideo(id: string, videoSummary: CreateEditVideo): import("./app.model").VideoSummary;
-    uploadVideo(videoSummary: CreateEditVideo, file: Express.Multer.File): Promise<import("./app.model").VideoSummary>;
+    uploadVideo(videoSummary: CreateEditVideo, file: Express.Multer.File): import("./app.model").VideoSummary;
 }
