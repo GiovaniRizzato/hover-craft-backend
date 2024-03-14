@@ -33,7 +33,7 @@ To use this solution, follow the instructions:
   ```
 4. Access the endpoints with http://localhost:3000/, by default
 
-## Lista de endpoints and Models :clipboard:
+## List of endpoints and Models :clipboard:
 
 | Method  |         URL           |             Request Body             |     Response Body     | Description |
 | ------- | --------------------- | ------------------------------------ |---------------------- | ----------- |
