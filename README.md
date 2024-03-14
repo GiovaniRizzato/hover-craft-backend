@@ -57,7 +57,7 @@ To use this solution, follow the instructions:
   {
     id: number,
     title: string,
-    duration: string
+    duration: string,
     isListed: boolean
   }
   ```
