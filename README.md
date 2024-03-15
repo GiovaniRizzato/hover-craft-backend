@@ -33,15 +33,15 @@ To use this solution, follow the instructions:
   ```
 4. Access the endpoints with http://localhost:3000/, by default
 
-## Lista de endpoints and Models :clipboard:
+## List of endpoints and Models :clipboard:
 
-| Method  |         URL           |             Request Body             |     Response Body     | Description |
-| ------- | --------------------- | ------------------------------------ |---------------------- | ----------- |
-| `GET`   | `/video`              |                                      | [Info DTO](#info-dto) | Retrieve all videos informations.|
-| `GET`   | `/video/{id}`         |                                      | [Info DTO](#info-dto) | Retrieve all video informations with {id}.|
-| `PUT`   | `/video/{id}`         | [New info DTO](#new-info-dto)        | [Info DTO](#info-dto) | Update informations for video with {id}.|
-| `POST`  | `/video`              | [New info DTO](#new-info-dto) + File | [Info DTO](#info-dto) | Upload new video.|
-| `GET`   | `/video/stream/{id}`  |                                      |                       | Request the video streaming with {id}.|
+| Method  |         URL           |             Request Body             |           Response Body         | Description |
+| ------- | --------------------- | ------------------------------------ |-------------------------------- | ----------- |
+| `GET`   | `/video`              |                                      | Array of [Info DTO](#info-dto)  | Retrieve all videos informations.|
+| `GET`   | `/video/{id}`         |                                      | [Info DTO](#info-dto)           | Retrieve all video informations with {id}.|
+| `PUT`   | `/video/{id}`         | [New info DTO](#new-info-dto)        | [Info DTO](#info-dto)           | Update informations for video with {id}.|
+| `POST`  | `/video`              | [New info DTO](#new-info-dto) + File | [Info DTO](#info-dto)           | Upload new video.|
+| `GET`   | `/video/stream/{id}`  |                                      |                                 | Request the video streaming with {id}.|
 
 #### New info DTO
   ```typescript
@@ -57,7 +57,7 @@ To use this solution, follow the instructions:
   {
     id: number,
     title: string,
-    duration: string
+    duration: string,
     isListed: boolean
   }
   ```
