@@ -80,8 +80,8 @@ describe('AppController', () => {
         .expect(HttpStatus.OK)
         .expect({
           id: 1,
-          title: 'Private fotage (Street)',
-          duration: '5 sec',
+          title: 'Private fotage (Street) - changed',
+          duration: '4 + 1 sec',
           isListed: true,
         });
     });
@@ -92,7 +92,7 @@ describe('AppController', () => {
       return request(app.getHttpServer())
         .post('/videos')
         .set('Content-Type', 'multipart/form-data')
-        .attach('file', path.resolve(__dirname, 'files', '3.mp4'))
+        .attach('file', path.resolve(__dirname, 'files', '0.mp4'))
         .field('title', 'Garden')
         .field('duration', '30 sec')
         .field('isListed', true)
