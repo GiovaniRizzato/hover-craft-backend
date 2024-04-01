@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { Video, VideoCreate } from './videos.schemas';
+import { Video, VideoCreateDTO } from './videos.schemas';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 @Injectable()
 export class VideosService {
-  constructor(@InjectModel(Video.name) private videoModel: Model<Video>) {}
+  constructor(@InjectModel(Video.name) private videoModel: Model<Video>) {
+    
+  }
 
-  async findById(id: number): Promise<Video> {
+  async findById(id: string): Promise<Video> {
     return this.videoModel.findById(id).exec();
   }
 
@@ -15,7 +17,7 @@ export class VideosService {
     return this.videoModel.find().exec();
   }
 
-  async create(videoCreate: VideoCreate): Promise<Video> {
+  async create(videoCreate: VideoCreateDTO, file: Express.Multer.File): Promise<Video> {
     const createdCat = new this.videoModel(videoCreate);
     return createdCat.save();
   }
