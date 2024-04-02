@@ -18,6 +18,5 @@ export const VideoInfoSchema = SchemaFactory.createForClass(VideoInfo);
 
 export class VideoInfoCreateDTO {
   title: string;
-  duration: string;
   isAvalible: boolean;
 }

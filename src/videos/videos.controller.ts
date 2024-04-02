@@ -1,9 +1,9 @@
+import { Response } from 'express';
 import {
   Controller,
   Get,
   Param,
   Res,
-  HttpStatus,
   Header,
   Put,
   Body,
@@ -13,15 +13,10 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   UseInterceptors,
-  StreamableFile,
 } from '@nestjs/common';
-import { VideosService } from './videos.service';
-import { statSync, createReadStream } from 'fs';
-import { Headers } from '@nestjs/common';
-import { Response } from 'express';
-import { VideoInfo, VideoInfoCreateDTO } from './videosInfo.schemas';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { join } from 'path';
+import { VideosService } from './videos.service';
+import { VideoInfoCreateDTO } from './videosInfo.schemas';
 
 @Controller('videos')
 export class VideosController {
