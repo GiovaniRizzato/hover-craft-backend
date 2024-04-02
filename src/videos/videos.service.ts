@@ -1,28 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { Video, VideoCreateDTO } from './videos.schemas';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Injectable, StreamableFile } from '@nestjs/common';
+import { VideoInfo, VideoInfoCreateDTO } from './videosInfo.schemas';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, Model, mongo } from 'mongoose';
+import { Readable } from 'stream';
+
 
 @Injectable()
 export class VideosService {
-  constructor(@InjectModel(Video.name) private videoModel: Model<Video>) {
-    
+  private readonly bucket: mongo.GridFSBucket;
+  constructor(
+    @InjectConnection() private readonly connection: Connection,
+    @InjectModel(VideoInfo.name) private videoModel: Model<VideoInfo>
+  ) {
+    this.bucket = new mongo.GridFSBucket(this.connection.db, {bucketName: 'video_files'})
   }
 
-  async findById(id: string): Promise<Video> {
+  async streamById(id: string): Promise<StreamableFile> {
+    return new StreamableFile(this.bucket.openDownloadStreamByName(`${id}.mp4`));
+  }
+
+  async findById(id: string): Promise<VideoInfo> {
     return this.videoModel.findById(id).exec();
   }
 
-  async findAll(): Promise<Video[]> {
+  async findAll(): Promise<VideoInfo[]> {
     return this.videoModel.find().exec();
   }
 
-  async create(videoCreate: VideoCreateDTO, file: Express.Multer.File): Promise<Video> {
-    const createdCat = new this.videoModel(videoCreate);
-    return createdCat.save();
+  async create(videoCreate: VideoInfoCreateDTO, file: Express.Multer.File): Promise<VideoInfo> {
+    const newVideoEntry = new this.videoModel(videoCreate);
+    newVideoEntry.id = new mongo.ObjectId();
+    Readable.from(file.buffer).pipe(this.bucket.openUploadStream(`${newVideoEntry.id}.mp4`));
+    return newVideoEntry.save();
   }
 
-  async edit(videoEdited: Video): Promise<Video> {
+  async edit(videoEdited: VideoInfo): Promise<VideoInfo> {
     return this.videoModel.findByIdAndUpdate(videoEdited);
   }
 }

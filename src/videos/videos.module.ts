@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { VideosService } from './videos.service';
 import { VideosController } from './videos.controller';
-import { Video, VideoSchema } from './videos.schemas';
+import { VideoInfo, VideoInfoSchema } from './videosInfo.schemas';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { Video, VideoSchema } from './videos.schemas';
         return { uri: mongod.getUri() };
       },
     }),
-    MongooseModule.forFeature([{ name: Video.name, schema: VideoSchema }]),
+    MongooseModule.forFeature([{ name: VideoInfo.name, schema: VideoInfoSchema }]),
   ],
   controllers: [VideosController],
   providers: [VideosService],

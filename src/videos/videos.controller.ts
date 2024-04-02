@@ -19,7 +19,7 @@ import { VideosService } from './videos.service';
 import { statSync, createReadStream } from 'fs';
 import { Headers } from '@nestjs/common';
 import { Response } from 'express';
-import { Video, VideoCreateDTO } from './videos.schemas';
+import { VideoInfo, VideoInfoCreateDTO } from './videosInfo.schemas';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 
@@ -31,9 +31,8 @@ export class VideosController {
   @Header('Content-Type', 'video/mp4')
   getStreamVideo(
     @Res({ passthrough: true }) res: Response,
-    @Param('id') id: string): StreamableFile {
-    const file = createReadStream(`assets/videos/${id}.mp4`);
-    return new StreamableFile(file);
+    @Param('id') id: string) {
+    return this.videosService.streamById(id);
   }
 
   @Get()
@@ -44,17 +43,17 @@ export class VideosController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.videosService.findById(id);
-  }
+  } 
 
   @Put(':id')
-  createVideo(@Param('id') id: string, @Body() videoSummary: VideoCreateDTO) {
+  createVideo(@Param('id') id: string, @Body() videoSummary: VideoInfoCreateDTO) {
     return this.videosService.edit({id, ...videoSummary});
   }
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   uploadVideo(
-    @Body() videoSummary: VideoCreateDTO,
+    @Body() videoSummary: VideoInfoCreateDTO,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
