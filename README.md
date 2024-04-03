@@ -39,10 +39,9 @@ To use this solution, follow the instructions:
   ```
 4. Access the endpoints with http://localhost:3000/, by default
 
-### Accessing Swagger documentation:
+#### Accessing Swagger documentation:
 
-The solution has a Swagger using the http://localhost:3000/api/ endpoint onde the steps of [Using this solution](#using-this-solution-rocket) section.
-
+The solution has a Swagger using the http://localhost:3000/api/ endpoint and the steps of [Using this solution](#using-this-solution-rocket) section.
 
 ## List of endpoints and Models :clipboard:
 
