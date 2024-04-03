@@ -3,7 +3,7 @@
 Welcome to the repository for Hover Creaft: Video Streaming! This project is a backend implementation for a standalone and lightwight video streaming, where you can upload, check the status and watch streaming of videos.
 
 
-Since this solution if intended as portfolio, it uses In-Memory MongDB database to not require any extra installation other than the [Node.js](https://nodejs.org/about), however, all the MongoDB connection is done in the [AppModule](src\app.module.ts), and if changed to a connection the rest of the transactions would still run.
+Since this solution is intended as portfolio, it uses In-Memory MongDB database to not require any extra installation other than the [Node.js](https://nodejs.org/about), however, all the MongoDB connection is setup in the [AppModule](src\app.module.ts), and if changed to a connection the rest of the transactions would still follow the new setup.
 
 ## Tecnologies used :hammer_and_wrench:
 
@@ -50,11 +50,11 @@ The solution has a Swagger using the http://localhost:3000/api/ endpoint and the
 
 | Method  |         URL           |             Request Body             |           Response Body         | Description |
 | ------- | --------------------- | ------------------------------------ |-------------------------------- | ----------- |
-| `GET`   | `/video`              |                                      | Array of [Info DTO](#video-info-dto)  | Retrieve all videos informations that are listed.|
+| `GET`   | `/video`              |                                      | Array of [Info DTO](#video-info-dto)  | Retrieve informations from all listed videos.|
 | `GET`   | `/video/{id}`         |                                      | [Info DTO](#video-info-dto)           | Retrieve all video informations with {id}.|
 | `PUT`   | `/video/{id}`         | [New info DTO](#new-video-info-dto)        | [Info DTO](#video-info-dto)           | Update informations for video with {id}.|
 | `POST`  | `/video`              | [New info DTO](#new-video-info-dto) + File | [Info DTO](#video-info-dto)           | Upload new video.|
-| `GET`   | `/video/stream/{id}`  |                                      |                                 | Request the video streaming with {id}.|
+| `GET`   | `/video/stream/{id}`  |                                      |                                 | Request the video streaming with {id}. It'll throw an error if the video is not available|
 
 #### New video info DTO
   ```typescript
