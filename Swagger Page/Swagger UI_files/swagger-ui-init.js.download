@@ -1,0 +1,285 @@
+
+window.onload = function() {
+  // Build a system
+  let url = window.location.search.match(/url=([^&]+)/);
+  if (url && url.length > 1) {
+    url = decodeURIComponent(url[1]);
+  } else {
+    url = window.location.origin;
+  }
+  let options = {
+  "swaggerDoc": {
+    "openapi": "3.0.0",
+    "paths": {
+      "/videos/stream/{id}": {
+        "get": {
+          "operationId": "VideosController_getStreamVideo",
+          "summary": "Stream the video with \"id\"",
+          "description": "**NOT WORKING WITH SWAGGER!**\n\nGet streaming of the video with \"id\".",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Videos"
+          ]
+        }
+      },
+      "/videos": {
+        "get": {
+          "operationId": "VideosController_findAll",
+          "summary": "List all listed videos infos",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/VideoInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Videos"
+          ]
+        },
+        "post": {
+          "operationId": "VideosController_uploadVideo",
+          "summary": "Upload new video",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "isStreamAvalible": {
+                      "type": "boolean"
+                    },
+                    "isListed": {
+                      "type": "boolean"
+                    },
+                    "file": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/VideoInfo"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Videos"
+          ]
+        }
+      },
+      "/videos/{id}": {
+        "get": {
+          "operationId": "VideosController_findOne",
+          "summary": "Get video info with \"id\"",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/VideoInfo"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Videos"
+          ]
+        },
+        "put": {
+          "operationId": "VideosController_createVideo",
+          "summary": "Edit the video info with \"id\"",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoInfoCreateDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/VideoInfo"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Videos"
+          ]
+        }
+      }
+    },
+    "info": {
+      "title": "Hover Craft: video streaming",
+      "description": "It's a MP4 video storage and streaming service",
+      "version": "1.0",
+      "contact": {
+        "name": "Giovani Rizzato",
+        "url": "https://github.com/GiovaniRizzato",
+        "email": "giovanirizzato@gmail.com"
+      },
+      "license": {
+        "name": "GNU General Public License v3.0",
+        "url": "https://github.com/GiovaniRizzato/hover-craft-backend/blob/main/LICENSE"
+      }
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+      "schemas": {
+        "VideoInfo": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Identification for the video"
+            },
+            "title": {
+              "type": "string",
+              "description": "Title for the video"
+            },
+            "isStreamAvalible": {
+              "type": "boolean",
+              "description": "Is the video avalible for streaming"
+            },
+            "isListed": {
+              "type": "boolean",
+              "description": "Is the video showing in the list of all videos"
+            }
+          },
+          "required": [
+            "_id",
+            "title",
+            "isStreamAvalible",
+            "isListed"
+          ]
+        },
+        "VideoInfoCreateDTO": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title for the video"
+            },
+            "isStreamAvalible": {
+              "type": "boolean",
+              "description": "Is the video avalible for streaming"
+            },
+            "isListed": {
+              "type": "boolean",
+              "description": "Is the video showing in the list of all videos"
+            }
+          },
+          "required": [
+            "title",
+            "isStreamAvalible",
+            "isListed"
+          ]
+        }
+      }
+    }
+  },
+  "customOptions": {}
+};
+  url = options.swaggerUrl || url
+  let urls = options.swaggerUrls
+  let customOptions = options.customOptions
+  let spec1 = options.swaggerDoc
+  let swaggerOptions = {
+    spec: spec1,
+    url: url,
+    urls: urls,
+    dom_id: '#swagger-ui',
+    deepLinking: true,
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    plugins: [
+      SwaggerUIBundle.plugins.DownloadUrl
+    ],
+    layout: "StandaloneLayout"
+  }
+  for (let attrname in customOptions) {
+    swaggerOptions[attrname] = customOptions[attrname];
+  }
+  let ui = SwaggerUIBundle(swaggerOptions)
+
+  if (customOptions.initOAuth) {
+    ui.initOAuth(customOptions.initOAuth)
+  }
+
+  if (customOptions.authAction) {
+    ui.authActions.authorize(customOptions.authAction)
+  }
+  
+  window.ui = ui
+}
