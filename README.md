@@ -2,6 +2,9 @@
 
 Welcome to the repository for Hover Creaft: Video Streaming! This project is a backend implementation for a standalone and lightwight video streaming, where you can upload, check the status and watch streaming of videos.
 
+
+Since this solution if intended as portfolio, it uses In-Memory MongDB database to not require any extra installation other than the [Node.js](https://nodejs.org/about), however, all the MongoDB connection is done in the [AppModule](src\app.module.ts), and if changed to a connection the rest of the transactions would still run.
+
 ## Tecnologies used :hammer_and_wrench:
 
 #### Frameworks:

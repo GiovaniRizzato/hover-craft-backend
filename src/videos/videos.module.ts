@@ -7,12 +7,6 @@ import { VideoInfo, VideoInfoSchema } from './videosInfo.schemas';
 
 @Module({
   imports: [
-    MongooseModule.forRootAsync({
-      useFactory: async () => {
-        const mongod = await MongoMemoryServer.create();
-        return { uri: mongod.getUri() };
-      },
-    }),
     MongooseModule.forFeature([{ name: VideoInfo.name, schema: VideoInfoSchema }]),
   ],
   controllers: [VideosController],
