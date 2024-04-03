@@ -1,7 +1,7 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { VideoInfo, VideoInfoCreateDTO } from './videosInfo.schemas';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model, mongo } from 'mongoose';
+import { Connection, Model, Types, mongo } from 'mongoose';
 import { Readable } from 'stream';
 
 
@@ -15,8 +15,8 @@ export class VideosService {
     this.bucket = new mongo.GridFSBucket(this.connection.db, {bucketName: 'video_files'})
   }
 
-  async streamById(id: string): Promise<StreamableFile> {
-    return new StreamableFile(this.bucket.openDownloadStreamByName(`${id}.mp4`));
+  async streamById(fileName: string): Promise<StreamableFile> {
+    return new StreamableFile(this.bucket.openDownloadStreamByName(fileName));
   }
 
   async findById(id: string): Promise<VideoInfo> {
@@ -24,17 +24,23 @@ export class VideosService {
   }
 
   async findAll(): Promise<VideoInfo[]> {
-    return this.videoModel.find().exec();
+    return this.videoModel.find({isListed: true}).exec();
   }
 
   async create(videoCreate: VideoInfoCreateDTO, file: Express.Multer.File): Promise<VideoInfo> {
-    const newVideoEntry = new this.videoModel(videoCreate);
-    newVideoEntry.id = new mongo.ObjectId();
-    Readable.from(file.buffer).pipe(this.bucket.openUploadStream(`${newVideoEntry.id}.mp4`));
-    return newVideoEntry.save();
+    const newVideoEntry = await (new this.videoModel({
+      fileName: file.originalname,
+      title: videoCreate.title,
+      mimetype: file.mimetype,
+      isStreamAvalible: videoCreate.isStreamAvalible,
+      isListed: videoCreate.isListed,
+    } as VideoInfo).save());
+    Readable.from(file.buffer).pipe(this.bucket.openUploadStream(newVideoEntry.fileName));
+    return newVideoEntry;
   }
 
-  async edit(videoEdited: VideoInfo): Promise<VideoInfo> {
-    return this.videoModel.findByIdAndUpdate(videoEdited);
+  async edit(id: string, videoInfoCreateDTO: VideoInfoCreateDTO): Promise<VideoInfo> {
+    const videoInfo = await this.videoModel.findById(id).exec();
+    return this.videoModel.findByIdAndUpdate(videoInfo._id, videoInfoCreateDTO, {new: true});
   }
 }

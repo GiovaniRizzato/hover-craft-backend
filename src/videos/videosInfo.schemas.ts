@@ -1,22 +1,43 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { ApiProperty } from '@nestjs/swagger';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 
 export type VideoDocument = HydratedDocument<VideoInfo>;
 
 @Schema()
 export class VideoInfo {
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId })
-  id: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: VideoInfo.name })
+  @ApiProperty({ name: "_id", type: "string", description: "Identification for the video" })
+  id?: Types.ObjectId;
+
   @Prop({ required: true, unique: true })
-  title: string;
+  fileName: string;
+
   @Prop({ required: true })
-  isAvalible: boolean;
+  mimetype: string;
+  
+  @Prop({ required: true })
+  @ApiProperty({ description: "Title for the video" })
+  title: string;
+
+  @Prop({ required: true })
+  @ApiProperty({ description: "Is the video avalible for streaming" })
+  isStreamAvalible: boolean;
+
+  @Prop({ required: true })
+  @ApiProperty({ description: "Is the video showing in the list of all videos" })
+  isListed: boolean;
 }
 
 export const VideoInfoSchema = SchemaFactory.createForClass(VideoInfo);
 
 export class VideoInfoCreateDTO {
+
+  @ApiProperty({ description: "Title for the video" })
   title: string;
-  isAvalible: boolean;
+  @ApiProperty({ description: "Is the video avalible for streaming" })
+  isStreamAvalible: boolean;
+  @ApiProperty({ description: "Is the video showing in the list of all videos" })
+  isListed: boolean;
 }
