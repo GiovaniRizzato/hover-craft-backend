@@ -1,7 +1,7 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { VideoInfo, VideoInfoCreateDTO } from './videosInfo.schemas';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model, Types, mongo } from 'mongoose';
+import { Connection, Model, mongo } from 'mongoose';
 import { Readable } from 'stream';
 
 
@@ -28,13 +28,17 @@ export class VideosService {
   }
 
   async create(videoCreate: VideoInfoCreateDTO, file: Express.Multer.File): Promise<VideoInfo> {
+    const nextId = new mongo.ObjectId();
+    const splitedFileName = file.originalname.split('.');
     const newVideoEntry = await (new this.videoModel({
-      fileName: file.originalname,
+      _id: nextId,
+      fileName: `${nextId}.${splitedFileName[splitedFileName.length - 1]}`,
       title: videoCreate.title,
       mimetype: file.mimetype,
       isStreamAvalible: videoCreate.isStreamAvalible,
       isListed: videoCreate.isListed,
     } as VideoInfo).save());
+    console.log(newVideoEntry.fileName);
     Readable.from(file.buffer).pipe(this.bucket.openUploadStream(newVideoEntry.fileName));
     return newVideoEntry;
   }
