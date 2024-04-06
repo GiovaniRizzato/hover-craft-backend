@@ -119,7 +119,7 @@ describe('AppController', () => {
   });
 
   test('should be able to stream the video', () => {
-    const video = fs.readFileSync('test/files/0.mp4')
+    const video = fs.readFileSync('test/files/0.mp4');
     return request(app.getHttpServer())
       .get('/videos/stream/0')
       .expect(HttpStatus.OK)

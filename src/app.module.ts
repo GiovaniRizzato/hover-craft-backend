@@ -13,7 +13,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
         return { uri: mongod.getUri() };
       },
     }),
-    VideosModule
+    VideosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

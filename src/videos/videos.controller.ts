@@ -16,12 +16,18 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from './videos.service';
 import { VideoInfo, VideoInfoCreateDTO } from './videosInfo.schemas';
-import { ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@ApiTags("Videos")
+@ApiTags('Videos')
 @Controller('videos')
 export class VideosController {
   constructor(private readonly videosService: VideosService) {}
@@ -30,11 +36,15 @@ export class VideosController {
   @Header('Content-Disposition', 'application/octet-stream')
   @ApiOperation({
     summary: 'Stream the video with "id"',
-    description: '**NOT WORKING WITH SWAGGER!**\n\nGet streaming of the video with "id".'
+    description:
+      '**NOT WORKING WITH SWAGGER!**\n\nGet streaming of the video with "id".',
   })
-  async getStreamVideo(@Res({passthrough: true}) response: Response, @Param('id') id: string) {
+  async getStreamVideo(
+    @Res({ passthrough: true }) response: Response,
+    @Param('id') id: string,
+  ) {
     const videoInfo = await this.videosService.findById(id);
-    if (videoInfo.isStreamAvalible){
+    if (videoInfo.isStreamAvalible) {
       response.header('Content-Type', videoInfo.mimetype);
       return this.videosService.streamById(videoInfo.fileName);
     } else {
@@ -48,7 +58,7 @@ export class VideosController {
   })
   @ApiOkResponse({
     type: VideoInfo,
-    isArray: true
+    isArray: true,
   })
   findAll() {
     return this.videosService.findAll();
@@ -59,11 +69,11 @@ export class VideosController {
     summary: 'Get video info with "id"',
   })
   @ApiOkResponse({
-    type: VideoInfo
+    type: VideoInfo,
   })
   findOne(@Param('id') id: string) {
     return this.videosService.findById(id);
-  } 
+  }
 
   @Put(':id')
   @ApiOperation({
@@ -71,7 +81,7 @@ export class VideosController {
   })
   @ApiConsumes('application/json')
   @ApiOkResponse({
-    type: VideoInfo
+    type: VideoInfo,
   })
   @ApiBody({ type: VideoInfoCreateDTO })
   createVideo(@Param('id') id: string, @Body() videoInfo: VideoInfoCreateDTO) {
@@ -84,7 +94,7 @@ export class VideosController {
     summary: 'Upload new video',
   })
   @ApiOkResponse({
-    type: VideoInfo
+    type: VideoInfo,
   })
   @ApiBody({
     schema: {
@@ -112,7 +122,7 @@ export class VideosController {
         ],
       }),
     )
-    file: Express.Multer.File,
+      file: Express.Multer.File,
   ) {
     return this.videosService.create(videoInfo, file);
   }
