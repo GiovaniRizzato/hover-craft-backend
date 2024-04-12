@@ -48,13 +48,13 @@ The solution has a Swagger using the http://localhost:3000/api/ endpoint and the
 
 ## List of endpoints and Models :clipboard:
 
-| Method  |         URL           |             Request Body             |           Response Body         | Description |
-| ------- | --------------------- | ------------------------------------ |-------------------------------- | ----------- |
-| `GET`   | `/video`              |                                      | Array of [Info DTO](#video-info-dto)  | Retrieve informations from all listed videos.|
-| `GET`   | `/video/{id}`         |                                      | [Info DTO](#video-info-dto)           | Retrieve all video informations with {id}.|
-| `PUT`   | `/video/{id}`         | [New info DTO](#new-video-info-dto)        | [Info DTO](#video-info-dto)           | Update informations for video with {id}.|
-| `POST`  | `/video`              | [New info DTO](#new-video-info-dto) + File | [Info DTO](#video-info-dto)           | Upload new video.|
-| `GET`   | `/video/watch/{id}`  |                                      |                                 | Request the video streaming with {id}. It'll throw an error if the video is not available|
+| Method  |         URL           |                 Request Body                |              Response Body            | Description |
+| ------- | --------------------- | ------------------------------------------- |-------------------------------------- | ----------- |
+| `GET`   | `/video`              |                                             | Array of [Info DTO](#video-info-dto)  | Retrieve informations from all listed videos.|
+| `GET`   | `/video/{id}`         |                                             | [Info DTO](#video-info-dto)           | Retrieve all video informations with {id}.|
+| `PUT`   | `/video/{id}`         | [New info DTO](#new-video-info-dto)         | [Info DTO](#video-info-dto)           | Update informations for video with {id}.|
+| `POST`  | `/video`              | [New info DTO](#new-video-info-dto) + File  | [Info DTO](#video-info-dto)           | Upload new video.|
+| `GET`   | `/video/watch/{id}`   |                                             |                                       | Request the video streaming with {id}. It'll throw an error if the video is not available|
 
 #### New video info DTO
   ```typescript
