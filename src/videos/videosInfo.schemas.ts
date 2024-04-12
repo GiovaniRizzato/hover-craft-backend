@@ -29,9 +29,7 @@ export class VideoInfo {
       isStreamAvalible: boolean;
 
     @Prop({ required: true })
-    @ApiProperty({
-      description: 'Is the video showing in the list of all videos',
-    })
+    @ApiProperty({description: 'Is the video showing in the list of all videos',})
       isListed: boolean;
 }
 
@@ -44,8 +42,6 @@ export class VideoInfoCreateDTO {
     @ApiProperty({ description: 'Is the video avalible for streaming' })
       isStreamAvalible: boolean;
 
-    @ApiProperty({
-      description: 'Is the video showing in the list of all videos',
-    })
+    @ApiProperty({description: 'Is the video showing in the list of all videos',})
       isListed: boolean;
 }

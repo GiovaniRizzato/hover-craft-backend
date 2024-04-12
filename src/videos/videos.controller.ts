@@ -19,6 +19,7 @@ import {
 import {
   ApiBody,
   ApiConsumes,
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -32,7 +33,7 @@ import { VideoInfo, VideoInfoCreateDTO } from './videosInfo.schemas';
 export class VideosController {
   constructor(private readonly videosService: VideosService) {}
 
-  @Get('stream/:id')
+  @Get('watch/:id')
   @Header('Content-Disposition', 'application/octet-stream')
   @ApiOperation({
     summary: 'Stream the video with "id"',
@@ -93,7 +94,7 @@ export class VideosController {
   @ApiOperation({
     summary: 'Upload new video',
   })
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     type: VideoInfo,
   })
   @ApiBody({

@@ -32,20 +32,33 @@ export class VideosService {
     videoCreate: VideoInfoCreateDTO,
     file: Express.Multer.File,
   ): Promise<VideoInfo> {
-    const nextId = new mongo.ObjectId();
-    const splitedFileName = file.originalname.split('.');
-    const newVideoEntry = await new this.videoModel({
-      _id: nextId,
-      fileName: `${nextId}.${splitedFileName[splitedFileName.length - 1]}`,
-      title: videoCreate.title,
-      mimetype: file.mimetype,
-      isStreamAvalible: videoCreate.isStreamAvalible,
-      isListed: videoCreate.isListed,
-    } as VideoInfo).save();
-    Readable.from(file.buffer).pipe(
-      this.bucket.openUploadStream(newVideoEntry.fileName),
-    );
-    return newVideoEntry;
+    return new Promise<VideoInfo>((resolve, reject) => {
+      const nextId = new mongo.ObjectId();
+
+      const splitedFileName = file.originalname.split('.');
+      const newFileName = `${nextId}.${splitedFileName[splitedFileName.length - 1]}`;
+
+      //Setting the readable stream
+      const readable = Readable.from(file.buffer).pipe(
+        this.bucket.openUploadStream(newFileName),
+      );
+
+      //Setting the "ending" handlers
+      readable.on('close', () => {
+        readable.destroy();
+        resolve(new this.videoModel({
+          _id: nextId,
+          fileName: newFileName,
+          title: videoCreate.title,
+          mimetype: file.mimetype,
+          isStreamAvalible: videoCreate.isStreamAvalible,
+          isListed: videoCreate.isListed,
+        } as VideoInfo).save());
+      });
+      readable.on('error', () => {
+        reject();
+      });
+    });
   }
 
   async edit(
