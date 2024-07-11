@@ -75,20 +75,20 @@ The solution has a Swagger using the http://localhost:3000/api/ endpoint and the
   }
   ```
 
-## Testing results
+## Testing results :white_check_mark:
 
 All the tests implementation are in "E2E" format to ensure testing accuracy, and can be found in [test/app.e2e-spec.ts](test/app.e2e-spec.ts).
 
 ```console
-PASS test/app.e2e-spec.ts (18.029 s)
+PASS  test/app.e2e-spec.ts (18.842 s)
   AppController
-    √ should the new video info (1316 ms)
+    √ should return an empty list when no videos had been uploaded yet (1360 ms)
     should be able to upload a new video
-      √ should be included listed (1251 ms)
-      √ should be able to view the info by id (1128 ms)
-      √ should be able to watch the video (1082 ms)
-      should be able to edit the video information
-        √ should NOT included listed after changing it to unlisted video (990 ms)
-        √ should be still able to view the info by id, even when not watchable or listed (1046 ms)
-        √ should NOT be able to watch the video after changing it (972 ms)
+      √ should be included listed (1680 ms)
+      √ should be able to view the info by id (1436 ms)
+      √ should be able to watch the video (1658 ms)
+      should be able to edit the video information (to not listed, nor avalible to watch)
+        √ should NOT included listed after changing it to unlisted video (1492 ms)
+        √ should be still able to view the info by id, even when not watchable nor listed (1640 ms)
+        √ should NOT be able to watch the video after changing it to not be avalible (1363 ms)
 ```

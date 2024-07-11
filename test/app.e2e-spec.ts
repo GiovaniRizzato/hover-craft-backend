@@ -31,7 +31,7 @@ describe('AppController', () => {
     await module.close();
   });
 
-  it('should the new video info', () => {
+  it('should return an empty list when no videos had been uploaded yet', () => {
     request(app.getHttpServer())
       .get('/videos')
       .expect(HttpStatus.OK)
@@ -94,7 +94,7 @@ describe('AppController', () => {
         .expect(video);
     });
 
-    describe('should be able to edit the video information', () => {
+    describe('should be able to edit the video information (to not listed, nor avalible to watch)', () => {
       beforeEach(async () => {
         const response = await request(app.getHttpServer())
           .put(`/videos/${id}`)
@@ -121,7 +121,7 @@ describe('AppController', () => {
           .expect([]);
       });
 
-      it('should be still able to view the info by id, even when not watchable or listed', async () => {
+      it('should be still able to view the info by id, even when not watchable nor listed', async () => {
         const response = await request(app.getHttpServer())
           .get(`/videos/${id}`)
           .expect(HttpStatus.OK);
@@ -135,7 +135,7 @@ describe('AppController', () => {
         }));
       });
 
-      it('should NOT be able to watch the video after changing it', () => {
+      it('should NOT be able to watch the video after changing it to not be avalible', () => {
         request(app.getHttpServer())
           .get(`/videos/watch/${id}`)
           .expect(HttpStatus.FORBIDDEN);
