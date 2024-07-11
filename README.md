@@ -74,3 +74,21 @@ The solution has a Swagger using the http://localhost:3000/api/ endpoint and the
     isListed: boolean
   }
   ```
+
+## Testing results
+
+All the tests implementation are in "E2E" format to ensure testing accuracy, and can be found in [test\app.e2e-spec.ts](test\app.e2e-spec.ts).
+
+```console
+PASS test/app.e2e-spec.ts (18.029 s)
+  AppController
+    √ should the new video info (1316 ms)
+    should be able to upload a new video
+      √ should be included listed (1251 ms)
+      √ should be able to view the info by id (1128 ms)
+      √ should be able to watch the video (1082 ms)
+      should be able to edit the video information
+        √ should NOT included listed after changing it to unlisted video (990 ms)
+        √ should be still able to view the info by id, even when not watchable or listed (1046 ms)
+        √ should NOT be able to watch the video after changing it (972 ms)
+```
