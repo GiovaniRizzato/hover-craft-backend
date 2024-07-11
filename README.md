@@ -77,7 +77,7 @@ The solution has a Swagger using the http://localhost:3000/api/ endpoint and the
 
 ## Testing results
 
-All the tests implementation are in "E2E" format to ensure testing accuracy, and can be found in [test\app.e2e-spec.ts](test\app.e2e-spec.ts).
+All the tests implementation are in "E2E" format to ensure testing accuracy, and can be found in [test/app.e2e-spec.ts](test/app.e2e-spec.ts).
 
 ```console
 PASS test/app.e2e-spec.ts (18.029 s)
